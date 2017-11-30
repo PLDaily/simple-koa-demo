@@ -1,8 +1,9 @@
 const path = require('path');
 const session = require('koa-session');
 const views = require('koa-views');
-const router = require('./router');
+const router = require('./routers');
 const logger = require('./middleware/logger');
+const config = require('./config.js')
 const Koa = require('koa');
 const app = new Koa();
 
@@ -25,5 +26,5 @@ app.use(session(CONFIG, app));
 
 app.use(router.routes()).use(router.allowedMethods());
 
-app.listen(3000);
-console.log('listening on port 3000');
+app.listen(config.port);
+console.log(`listening on port ${config.port}`);

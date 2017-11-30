@@ -1,33 +1,45 @@
 const mysql = require('mysql');
-global.connectionPool = mysql.createPool({
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: '',
-  database: 'nmysql'
-});
+const config = require('../config.js')
 
-const getUser = (sql, value) => {
-  return new Promise(resolve => {
-    global.connectionPool.getConnection((err, connection) => {
-      if(err) throw err
-      connection.query(sql, value, (err, rows) => {
+class Api {
+  constructor() {
+    this.connectionPool = mysql.createPool({
+      host: config.database.host,
+      port: config.database.port,
+      user: config.database.user,
+      password: config.database.password,
+      database: config.database.database
+    });
+  }
+  login(...value) {
+  }
+  logout() {
+  }
+  register(...value) {
+    return new Promise(resolve => {
+      this.connectionPool.getConnection((err, connection) => {
         if(err) throw err
-        resolve(rows[0])
-        connection.release();
+        connection.query(`INSERT users (username, password) VALUES (?, ?)`, value, (err, rows) => {
+          if(err) throw err
+          connection.release();
+          resolve(rows[0])
+        })
       })
     })
-  })
+  }
+  getUser(value) {
+    return new Promise(resolve => {
+      this.connectionPool.getConnection((err, connection) => {
+        if(err) throw err
+        connection.query(`SELECT * FROM users WHERE id = ?`, value, (err, rows) => {
+          if(err) throw err
+          resolve(rows[0])
+          connection.release();
+        })
+      })
+    })
+  }
 }
 
-// error
-// const getUser = async (sql, value) => {
-//     let connection = await global.connectionPool.getConnection()
-//     let rows = await connection.query(sql, value)
-//     return rows[0]
-// }
 
-
-module.exports = {
-	getUser
-}
+module.exports = new Api()
