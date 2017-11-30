@@ -3,10 +3,12 @@
 
 ### 构建
 ```
+# 安装包依赖
 npm install
 ```
 ```
-node index.js
+# 测试
+npm run dev
 ```
 
 ### 组件
