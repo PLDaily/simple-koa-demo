@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --harmony ./index"
+    "lint": "eslint . --fix",
+    "dev": "npm run lint && nodemon --harmony ./index"
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +19,8 @@
     "mysql": "^2.15.0"
   },
   "devDependencies": {
-    "nodemon": "^1.12.1"
+    "eslint": "^4.12.1",
+    "nodemon": "^1.12.1",
+    "standard": "^10.0.3"
   }
 }

@@ -1,10 +1,10 @@
-const userModel = require("../models/user.js");
+const userModel = require('../models/user.js')
 
 const user = {
-	async create(user) {
-		let result = await userModel.create(user);
-		return result;
-	}
+  async create (user) {
+    let result = await userModel.create(user)
+    return result
+  }
 }
 
-module.exports = user;
+module.exports = user

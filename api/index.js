@@ -1,45 +1,44 @@
-const mysql = require('mysql');
+const mysql = require('mysql')
 const config = require('../config.js')
 
 class Api {
-  constructor() {
+  constructor () {
     this.connectionPool = mysql.createPool({
       host: config.database.host,
       port: config.database.port,
       user: config.database.user,
       password: config.database.password,
       database: config.database.database
-    });
+    })
   }
-  login(...value) {
+  login (...value) {
   }
-  logout() {
+  logout () {
   }
-  register(...value) {
+  register (...value) {
     return new Promise(resolve => {
       this.connectionPool.getConnection((err, connection) => {
-        if(err) throw err
+        if (err) throw err
         connection.query(`INSERT users (username, password) VALUES (?, ?)`, value, (err, rows) => {
-          if(err) throw err
-          connection.release();
+          if (err) throw err
+          connection.release()
           resolve(rows[0])
         })
       })
     })
   }
-  getUser(value) {
+  getUser (value) {
     return new Promise(resolve => {
       this.connectionPool.getConnection((err, connection) => {
-        if(err) throw err
+        if (err) throw err
         connection.query(`SELECT * FROM users WHERE id = ?`, value, (err, rows) => {
-          if(err) throw err
+          if (err) throw err
           resolve(rows[0])
-          connection.release();
+          connection.release()
         })
       })
     })
   }
 }
-
 
 module.exports = new Api()
