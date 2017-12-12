@@ -1,5 +1,5 @@
 const userService = require('../services/user.js')
-let register = async function (ctx) {
+let register = async (ctx) => {
   let result = {
     success: true,
     message: '',

@@ -1,6 +1,7 @@
 const path = require('path')
 const session = require('koa-session')
 const views = require('koa-views')
+const bodyParser = require('koa-bodyparser')
 const router = require('./routers')
 const logger = require('./middleware/logger')
 const config = require('./config.js')
@@ -8,7 +9,7 @@ const Koa = require('koa')
 const app = new Koa()
 
 app.use(logger())
-
+app.use(bodyParser())
 app.use(views(path.join(__dirname, 'views'), {extension: 'ejs'}))
 
 app.keys = ['some secret hurr']

@@ -17,3 +17,4 @@ npm run dev
 - koa-session
 - koa-views
 - mysql
+- bodyparser

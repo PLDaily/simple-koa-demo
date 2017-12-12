@@ -1,12 +1,12 @@
 const checkLogin = async (ctx, next) => {
-  if (!ctx.session || !ctx.session.userId) {
-    ctx.redirect('/')
+  if (!ctx.session || !ctx.session.username) {
+    ctx.redirect('/login')
   }
   await next()
 }
 
 const checkNotLogin = async (ctx, next) => {
-  if (ctx.session && ctx.session.userId) {
+  if (ctx.session && ctx.session.username) {
     ctx.redirect('/')
   }
   await next()
