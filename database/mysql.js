@@ -27,6 +27,12 @@ let insertData = (table, values) => {
   return query(sql, [table, values])
 }
 
+let selectData = (table, values) => {
+  let sql = `SELECT * FROM ?? WHERE username="${values.username}" and password="${values.password}"`
+  return query(sql, [table])
+}
+
 module.exports = {
-  insertData
+  insertData,
+  selectData
 }
