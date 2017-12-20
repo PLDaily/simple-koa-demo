@@ -1,4 +1,4 @@
-const userService = require('../services/user.js')
+const userModel = require('../models/user.js')
 
 let register = async (ctx) => {
   let newUser = {
@@ -6,7 +6,7 @@ let register = async (ctx) => {
     password: ctx.request.body.password
   }
   try {
-    let result = await userService.create(newUser)
+    let result = await userModel.create(newUser)
     ctx.session = newUser
     ctx.session.userId = result.insertId
     ctx.redirect('/')

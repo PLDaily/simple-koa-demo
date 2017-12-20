@@ -1,4 +1,4 @@
-const userService = require('../services/user.js')
+const userModel = require('../models/user.js')
 
 let logout = async (ctx) => {
   ctx.session = null
@@ -11,7 +11,7 @@ let login = async (ctx) => {
     password: ctx.request.body.password
   }
   try {
-    let result = await userService.signIn(user)
+    let result = await userModel.signIn(user)
     if (Array.isArray(result) && result.length > 0) {
       result = result[0]
       ctx.session = result
