@@ -1,4 +1,5 @@
 const userModel = require('../models/user.js')
+const md5 = require('md5')
 
 let logout = async (ctx) => {
   ctx.session = null
@@ -8,7 +9,7 @@ let logout = async (ctx) => {
 let login = async (ctx) => {
   let user = {
     username: ctx.request.body.username,
-    password: ctx.request.body.password
+    password: md5(ctx.request.body.password)
   }
   try {
     let result = await userModel.signIn(user)

@@ -1,9 +1,10 @@
 const userModel = require('../models/user.js')
+const md5 = require('md5')
 
 let register = async (ctx) => {
   let newUser = {
     username: ctx.request.body.username,
-    password: ctx.request.body.password
+    password: md5(ctx.request.body.password)
   }
   try {
     let result = await userModel.create(newUser)
