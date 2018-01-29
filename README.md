@@ -18,3 +18,4 @@ npm run dev
 - koa-views
 - mysql
 - bodyparser
+- koa-log4

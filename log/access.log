@@ -1,0 +1,5 @@
+[2018-01-29T20:18:05.281] [INFO] http - ::1 - - "GET /login HTTP/1.1" 200 385 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+[2018-01-29T20:18:19.098] [INFO] http - ::1 - - "GET /login HTTP/1.1" 200 385 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+[2018-01-29T20:18:20.266] [INFO] http - ::1 - - "GET /login HTTP/1.1" 200 385 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+[2018-01-29T20:21:28.983] [INFO] http - ::1 - - "GET /login HTTP/1.1" 200 385 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+[2018-01-29T20:23:52.994] [INFO] http - ::1 - - "GET /login HTTP/1.1" 200 385 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
