@@ -11,16 +11,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^2.5.7",
+    "axios": "^0.17.1",
+    "crypto": "^1.0.1",
     "koa": "^2.4.1",
     "koa-bodyparser": "^4.2.0",
-    "koa-ejs": "^4.1.0",
     "koa-log4": "^2.3.0",
     "koa-router": "^7.3.0",
-    "koa-session": "^5.5.1",
-    "koa-views": "^6.1.2",
-    "md5": "^2.2.1",
-    "mysql": "^2.15.0"
+    "mysql2": "^1.5.2",
+    "redis": "^2.8.0",
+    "sequelize": "^4.32.2",
+    "validator": "^9.4.1"
   },
   "devDependencies": {
     "eslint": "^4.12.1",

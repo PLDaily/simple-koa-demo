@@ -1,32 +1,15 @@
 const Router = require('koa-router')
 const router = new Router()
-const loginController = require('../controllers/login.js')
-const registerController = require('../controllers/register.js')
-const checkLogin = require('../middleware/check').checkLogin
-const checkNotLogin = require('../middleware/check').checkNotLogin
+const LoginController = require('../controllers/login')
+const RegisterController = require('../controllers/register')
+const ArticleController = require('../controllers/article')
+const ArticleLikeController = require('../controllers/articlelike')
 
-// Index
-router.get('/', checkLogin, async (ctx, next) => {
-  await ctx.render('index', {
-    message: '首页'
-  })
-})
-
-// Auth
-router.get('Auth', '/login', checkNotLogin, async (ctx) => {
-  await ctx.render('login', {
-    message: '登录'
-  })
-})
-router.post('Auth', '/login', loginController.login)
-
-router.get('Auth', '/logout', checkLogin, loginController.logout)
-
-router.get('Auth', '/register', checkNotLogin, async (ctx) => {
-  await ctx.render('register', {
-    message: '注册'
-  })
-})
-router.post('Auth', '/register', registerController.register)
+router.post('/api/login', LoginController.login)
+router.post('/api/register', RegisterController.register)
+router.post('/api/article', ArticleController.save)
+router.delete('/api/article', ArticleController.remove)
+router.post('/api/article/like', ArticleLikeController.save)
+router.delete('/api/article/like', ArticleLikeController.remove)
 
 module.exports = router

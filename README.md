@@ -7,7 +7,7 @@
 npm install
 ```
 ```
-# 测试
+# 开发
 npm run dev
 ```
 
@@ -19,3 +19,7 @@ npm run dev
 - mysql
 - bodyparser
 - koa-log4
+- redis
+- 第三方登录
+- sequelize
+- validator
