@@ -1,7 +1,7 @@
 const Event = require('events')
 const logger = require('koa-log4').getLogger('article')
 const validator = require('validator')
-const ArticleService = require('../service/article')
+const ArticleService = require('../services/article')
 const redisClient = require('../database/redis')
 
 const getUid = token => {
@@ -14,6 +14,38 @@ const getUid = token => {
       }
     })
   })
+}
+
+const get = async (ctx) => {
+  const {articleid} = ctx.params
+  console.log(articleid)
+  const event = new Event()
+  event.on('prop_err', msg => {
+    ctx.status = 422 // 请求被服务器正确解析，但是包含无效字段
+    ctx.body = {
+      error: msg
+    }
+  })
+  if (!articleid) {
+    event.emit('prop_err', 'token、文章id不能为空')
+    return
+  }
+
+  try {
+    const article = await ArticleService.findAll(articleid)
+    if (article) {
+      ctx.status = 200
+      ctx.body = {
+        article: article
+      }
+    } else {
+      event.emit('prop_err', '文章不存在')
+      return
+    }
+  } catch (err) {
+    logger.error('Something went wrong:', err)
+    event.emit('prop_err', 'mysql服务端错误')
+  }
 }
 
 const save = async (ctx) => {
@@ -115,5 +147,6 @@ const remove = async (ctx) => {
 
 module.exports = {
   save,
-  remove
+  remove,
+  get
 }

@@ -1,9 +1,9 @@
 const Event = require('events')
 const logger = require('koa-log4').getLogger('articlelike')
 const validator = require('validator')
-const ArticleLikeService = require('../service/articlelike')
-const ArticleService = require('../service/article')
-const UserService = require('../service/user')
+const ArticleLikeService = require('../services/articlelike')
+const ArticleService = require('../services/article')
+const UserService = require('../services/user')
 const redisClient = require('../database/redis')
 
 const getUid = token => {

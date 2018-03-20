@@ -2,7 +2,7 @@ const crypto = require('crypto')
 const Event = require('events')
 const logger = require('koa-log4').getLogger('register')
 const validator = require('validator')
-const UserService = require('../service/user')
+const UserService = require('../services/user')
 const redisClient = require('../database/redis')
 
 const register = async (ctx) => {
