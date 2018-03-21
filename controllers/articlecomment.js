@@ -1,5 +1,5 @@
 const Event = require('events')
-const logger = require('koa-log4').getLogger('articlelike')
+const logger = require('koa-log4').getLogger('articlecomment')
 const validator = require('validator')
 const ArticleCommentService = require('../services/articlecomment')
 const ArticleService = require('../services/article')

@@ -30,7 +30,7 @@ const get = async (ctx) => {
     return
   }
   try {
-    const article = await ArticleService.findAll(articleid)
+    const article = await ArticleService.findArticleDetail(articleid)
     if (article) {
       ctx.status = 200
       ctx.body = {

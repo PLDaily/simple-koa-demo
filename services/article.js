@@ -5,6 +5,26 @@ const ArticleLike = models.ArticleLike
 const ArticleComment = models.ArticleComment
 
 module.exports = {
+  async findAll () {
+    const result = await Article.findAll({
+      attributes: ['id', 'user_id', 'title', 'content'],
+      include: [{
+        model: User,
+        as: 'user',
+        attributes: ['id', 'username']
+      }]
+    })
+    return result
+  },
+  async findUserArticle (userid) {
+    const result = await Article.findAll({
+      where: {
+        user_id: userid
+      },
+      attributes: ['id', 'user_id', 'title', 'content']
+    })
+    return result
+  },
   async find (user, article, commentid) {
     const result = await ArticleLike.find({
       where: {
@@ -37,7 +57,7 @@ module.exports = {
     })
     return result
   },
-  async findAll (id) {
+  async findArticleDetail (id) {
     const result = await Article.findAll({
       where: {
         id: id
