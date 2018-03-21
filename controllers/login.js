@@ -9,20 +9,20 @@ const login = async (ctx) => {
   const username = validator.trim(ctx.request.body.username).toLowerCase()
   let password = validator.trim(ctx.request.body.password)
   const event = new Event()
-  event.on('prop_err', msg => {
-    ctx.status = 422 // 请求被服务器正确解析，但是包含无效字段
+  event.on('error', msg => {
+    ctx.status = 422
     ctx.body = {
       error: msg
     }
   })
   if ([username, password].some(item => { return item === '' })) {
-    event.emit('prop_err', '用户名或密码不能为空')
+    event.emit('error', '用户名或密码不能为空')
     return
   }
   try {
     const user = await UserService.findByUserName(username)
     if (!user) {
-      event.emit('prop_err', '用户不存在')
+      event.emit('error', '用户不存在')
       return
     }
     password = crypto.createHash('md5').update(password).digest('hex')
@@ -37,12 +37,12 @@ const login = async (ctx) => {
         username: user.username
       }
     } else {
-      event.emit('prop_err', '密码错误')
+      event.emit('error', '密码错误')
       return
     }
   } catch (err) {
     logger.error('Something went wrong:', err)
-    event.emit('prop_err', 'mysql服务端错误')
+    event.emit('error', 'mysql服务端错误')
   }
 }
 

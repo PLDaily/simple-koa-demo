@@ -2,8 +2,19 @@ const models = require('../models')
 const Article = models.Article
 const User = models.User
 const ArticleLike = models.ArticleLike
+const ArticleComment = models.ArticleComment
 
 module.exports = {
+  async find (user, article, commentid) {
+    const result = await ArticleLike.find({
+      where: {
+        id: commentid,
+        user_id: user.id,
+        article_id: article.id
+      }
+    })
+    return result
+  },
   async create (article) {
     const result = await Article.create(article)
     return result
@@ -31,16 +42,29 @@ module.exports = {
       where: {
         id: id
       },
+      attributes: ['id', 'user_id', 'title', 'content'],
       include: [{
+        model: User,
+        as: 'user',
+        attributes: ['id', 'username']
+      }, {
         model: ArticleLike,
         as: 'articlelikes',
+        attributes: ['user_id'],
         include: [{
           model: User,
-          as: 'user'
+          as: 'user',
+          attributes: ['id', 'username']
         }]
       }, {
-        model: User,
-        as: 'user'
+        model: ArticleComment,
+        as: 'articlecomments',
+        attributes: ['id', 'content'],
+        include: [{
+          model: User,
+          as: 'user',
+          attributes: ['id', 'username']
+        }]
       }]
     })
     return result

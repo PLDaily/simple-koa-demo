@@ -1,7 +1,9 @@
 const Event = require('events')
-const logger = require('koa-log4').getLogger('article')
+const logger = require('koa-log4').getLogger('articlelike')
 const validator = require('validator')
+const ArticleCommentService = require('../services/articlecomment')
 const ArticleService = require('../services/article')
+const UserService = require('../services/user')
 const redisClient = require('../database/redis')
 
 const getUid = token => {
@@ -16,39 +18,9 @@ const getUid = token => {
   })
 }
 
-const get = async (ctx) => {
-  const {articleid} = ctx.params
-  const event = new Event()
-  event.on('error', msg => {
-    ctx.status = 422
-    ctx.body = {
-      error: msg
-    }
-  })
-  if (!articleid) {
-    event.emit('prop_err', '文章id不能为空')
-    return
-  }
-  try {
-    const article = await ArticleService.findAll(articleid)
-    if (article) {
-      ctx.status = 200
-      ctx.body = {
-        article: article
-      }
-    } else {
-      event.emit('error', '文章不存在')
-      return
-    }
-  } catch (err) {
-    logger.error('Something went wrong:', err)
-    event.emit('error', 'mysql服务端错误')
-  }
-}
-
 const save = async (ctx) => {
   const token = validator.trim(ctx.request.body.token)
-  const title = validator.trim(ctx.request.body.title).toLowerCase()
+  const articleid = validator.trim(ctx.request.body.articleid)
   const content = validator.trim(ctx.request.body.content)
   let userid = 0
   const event = new Event()
@@ -58,8 +30,8 @@ const save = async (ctx) => {
       error: msg
     }
   })
-  if ([token, title, content].some(item => { return item === '' })) {
-    event.emit('error', 'token、标题或内容不能为空')
+  if ([token, articleid, content].some(item => { return item === '' })) {
+    event.emit('error', 'token、文章id或评论内容不能为空')
     return
   }
   try {
@@ -73,14 +45,21 @@ const save = async (ctx) => {
     event.emit('error', 'token失效，请重新登录')
   } else {
     try {
-      const article = await ArticleService.create({
-        title,
-        content,
-        userid
-      })
+      const user = await UserService.findById(userid)
+      if (!user) {
+        event.emit('error', '用户不存在')
+        return
+      }
+      const article = await ArticleService.findById(articleid)
+      if (!article) {
+        event.emit('error', '文章不存在')
+        return
+      }
+      const result = await ArticleCommentService.create(user, article, content)
       ctx.status = 200
       ctx.body = {
-        articleid: article.id
+        articleid: article.id,
+        commentid: result.id
       }
     } catch (err) {
       logger.error('Something went wrong:', err)
@@ -90,7 +69,9 @@ const save = async (ctx) => {
 }
 
 const remove = async (ctx) => {
-  const {token, articleid} = ctx.request.body
+  const token = validator.trim(ctx.request.body.token)
+  const articleid = validator.trim(ctx.request.body.articleid)
+  const commentid = validator.trim(ctx.request.body.commentid)
   let userid = 0
   const event = new Event()
   event.on('error', msg => {
@@ -99,8 +80,8 @@ const remove = async (ctx) => {
       error: msg
     }
   })
-  if ([token, articleid].some(item => { return item === '' })) {
-    event.emit('error', 'token、文章id不能为空')
+  if ([token, articleid, commentid].some(item => { return item === '' })) {
+    event.emit('error', 'token、文章id或评论id不能为空')
     return
   }
   try {
@@ -110,25 +91,30 @@ const remove = async (ctx) => {
     event.emit('error', 'redis服务端错误')
     return
   }
-
   if (!userid) {
     event.emit('error', 'token失效，请重新登录')
   } else {
     try {
+      const user = await UserService.findById(userid)
+      if (!user) {
+        event.emit('error', '用户不存在')
+        return
+      }
       const article = await ArticleService.findById(articleid)
-      if (article) {
-        if (parseInt(article.userid) === parseInt(userid)) {
-          await ArticleService.remove(article.id)
-          ctx.status = 200
-          ctx.body = {
-            articleid: article.id
-          }
-        } else {
-          event.emit('error', '你无权限删除')
-          return
+      if (!article) {
+        event.emit('error', '文章不存在')
+        return
+      }
+      const result = await ArticleCommentService.find(user, article, commentid)
+      if (result) {
+        await ArticleCommentService.remove(user, article, commentid)
+        ctx.status = 200
+        ctx.body = {
+          articleid: article.id,
+          commentid: result.id
         }
       } else {
-        event.emit('error', '获取文章失败')
+        event.emit('error', '评论不存在')
         return
       }
     } catch (err) {
@@ -140,6 +126,5 @@ const remove = async (ctx) => {
 
 module.exports = {
   save,
-  remove,
-  get
+  remove
 }
